@@ -1,8 +1,8 @@
-# COMP713 Assessment 2 – Peer-to-Peer Messaging System
+# COMP713 Assignment 1 – Option B Small Peer-to-Peer Message-Passing System
 
 ## Overview
 
-This project is a small peer-to-peer messaging system developed for COMP713 Assessment 2.
+This project is a small peer-to-peer messaging system developed for COMP713 Assignment 1.
 
 The system uses three independent Java peers that communicate directly with each other using TCP sockets. There is no central server.
 
