@@ -37,7 +37,7 @@ public class Peer {
                             String[] parts = message.split("\\|");
                             int receivedClock = Integer.parseInt(parts[1].trim());
                             lamportClock[0] = Math.max(lamportClock[0], receivedClock) + 1;
-                            System.out.println("Lamport clock updated to "+lamportClock[0]);
+                            System.out.println("Lamport clock updated to " + lamportClock[0]);
                         }
                         socket.close();
                     } catch (Exception ex) {
@@ -50,29 +50,37 @@ public class Peer {
             while (true) {
                 System.out.println("> ");
                 String command = scanner.nextLine();
-                if(command.startsWith("clock"))
-                {
-                    System.out.println("Current Lamport clock: "+lamportClock[0]);
-                }
-                if (command.startsWith("connect")) {
-                    System.out.println("Current Lamport clock: "+lamportClock[0]);
-                    int targetPort = Integer.parseInt(command.substring(8));
-                    Socket socket = new Socket("localhost", targetPort);
-                    System.out.println("Connected to peer on port " + targetPort);
+                if (command.equals("clock")) {
+                    System.out.println("Current Lamport clock: " + lamportClock[0]);
+                } else if (command.startsWith("connect ")) {
+                    try {
+                        int targetPort = Integer.parseInt(command.substring(8));
+                        Socket socket = new Socket("localhost", targetPort);
+                        System.out.println("Connected to peer on port " + targetPort);
 
-                    System.out.println("Message: ");
-                    String message = scanner.nextLine();
+                        System.out.println("Message: ");
+                        String message = scanner.nextLine();
 
-                    lamportClock[0]++;
+                        lamportClock[0]++;
 
-                    PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
-                    writer.println("Peer"+peerId+"|"+lamportClock[0]+"|"+message);
-                    System.out.println("Sent at Lamport time "+lamportClock[0]);
-                    socket.close();
+                        PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
+                        writer.println("Peer" + peerId + "|" + lamportClock[0] + "|" + message);
+                        System.out.println("Sent at Lamport time " + lamportClock[0]);
+                        socket.close();
+
+
+                    } catch (Exception e) {
+                        System.out.println("Connection failed. ");
+                    }
+                } else {
+                    System.out.println("Unknown command.");
+                    System.out.println("Available commands: connect <port>, clock");
                 }
             }
-        } catch (Exception e) {
-            System.out.println("Peer start failed. "+ e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
-}
+    }
+
+
